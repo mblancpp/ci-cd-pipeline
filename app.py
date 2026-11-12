@@ -6,3 +6,5 @@ def subtract(a, b):
 
 if __name__ == "__main__":
     print("App initialized successfully.")
+
+# Testing CI/CD pipeline webhook
