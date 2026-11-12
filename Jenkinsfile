@@ -1,15 +1,6 @@
 pipeline {
     agent any
     environment {
-<<<<<<< HEAD
-        // This securely pulls your secret token from Jenkins Credentials manager
-        WEBEX_BOT_TOKEN = credentials('webex-bot-token')
-        // Set your Webex Room ID directly here or bind it as a credential too
-        WEBEX_ROOM_ID   = 'YOUR_ROOM_ID_HERE'
-=======
-        WEBEX_TOKEN = 'YOUR_ACTUAL_BOT_TOKEN_HERE'
-        WEBEX_ROOM_ID = 'YOUR_ACTUAL_ROOM_ID_HERE'
->>>>>>> Initial commit with app and unit tests
     }
     stages {
         stage('Checkout') {
