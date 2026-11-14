@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         WEBEX_BOT_TOKEN = credentials('webex-bot-token')
-        WEBEX_ROOM_ID   = 'Y2lzY29zcGFyazovL3VybjpURUFNOnVzLXdlc3QtMl9yL1JPT00vNTZiNWZlZTAtZGU2Zi0xMWYxLWFkOGYtODVkNmNiYTYxZmVi' // Replace with your actual Room ID
+        WEBEX_ROOM_ID   = 'Y2lzY29zcGFyazovL3VybjpURUFNOnVzLXdlc3QtMl9yL1JPT00vNTZiNWZlZTAtZGU2Zi0xMWYxLWFkOGYtODVkNmNiYTYxZmVi'
     }
     stages {
         stage('Run Unit Tests') {
@@ -13,16 +13,20 @@ pipeline {
     }
     post {
         success {
-            script {
-                sh 'pip install requests'
-                sh 'python3 notify_webex.py "✅ Build Success! Jenkins successfully built and tested commit on GitHub."'
-            }
+            sh """
+                curl -X POST https://webexapis.com/v1/messages \
+                -H "Authorization: Bearer \${WEBEX_BOT_TOKEN}" \
+                -H "Content-Type: application/json" \
+                -d '{"roomId": "${WEBEX_ROOM_ID}", "text": "✅ Jenkins Build SUCCESS!"}'
+            """
         }
         failure {
-            script {
-                sh 'pip install requests'
-                sh 'python3 notify_webex.py "❌ Build Failed! Check Jenkins console output."'
-            }
+            sh """
+                curl -X POST https://webexapis.com/v1/messages \
+                -H "Authorization: Bearer \${WEBEX_BOT_TOKEN}" \
+                -H "Content-Type: application/json" \
+                -d '{"roomId": "${WEBEX_ROOM_ID}", "text": "❌ Jenkins Build FAILED!"}'
+            """
         }
     }
 }
